@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 import pickle
 import numpy as np
@@ -22,11 +23,12 @@ def predict():
         
         # Make prediction
         prediction = model.predict(input_data)[0]
-        result = "✅ Placement Ho Jayega" if prediction == 0 else "❌ Placement Nahi Hoga"
+        result = "✅ Placement Ho Jayega" if prediction == 1 else "❌ Placement Nahi Hoga"
         
         return render_template('index.html', prediction=result)
     except Exception as e:
         return render_template('index.html', prediction=f"Error: {str(e)}")
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))  # Get the Railway-assigned port
+    app.run(host="0.0.0.0", port=port)
