@@ -54,7 +54,7 @@
 
     <div class="container">
         <h2>Placement Prediction</h2>
-        <form action="/predict" method="post">
+        <form action="{{ url_for('predict') }}" method="post">
             <input type="text" name="cgpa" placeholder="Enter CGPA" required>
             <input type="text" name="iq" placeholder="Enter IQ Score" required>
             <button type="submit">Predict Placement</button>
