@@ -23,29 +23,30 @@ def predict():
     try:
         print(f"📥 Received Request Data: {request.form}")
 
-        # Check if input fields are present
-        if 'cgpa' not in request.form or 'iq' not in request.form:
-            print("❌ Missing Input Fields!")
-            return render_template('index.html', prediction="❌ Error: Missing input fields.")
+        # ✅ Check if input fields are present
+        cgpa = request.form.get('cgpa', '').strip()
+        iq = request.form.get('iq', '').strip()
 
-        cgpa = request.form['cgpa']
-        iq = request.form['iq']
+        if not cgpa or not iq:
+            print("❌ Missing Input Fields!")
+            return render_template('index.html', prediction="❌ Error: Please enter both CGPA and IQ.")
 
         print(f"📥 Extracted Input: CGPA={cgpa}, IQ={iq}")
 
-        # Convert inputs to float
+        # ✅ Convert inputs to float
         try:
             cgpa = float(cgpa)
             iq = float(iq)
         except ValueError:
             print("❌ Invalid Input Type: Expected Numbers")
-            return render_template('index.html', prediction="❌ Error: Invalid input type.")
+            return render_template('index.html', prediction="❌ Error: Please enter valid numbers for CGPA and IQ.")
 
+        # ✅ Ensure model is loaded
         if model is None:
             print("❌ Model Not Loaded")
-            return render_template('index.html', prediction="❌ Error: Model not loaded.")
+            return render_template('index.html', prediction="❌ Error: Model not found. Please try again later.")
 
-        # Prepare input and make prediction
+        # ✅ Prepare input and make prediction
         input_data = np.array([[cgpa, iq]])
         prediction = model.predict(input_data)[0]
         result = "✅ Placement Ho Jayega" if prediction == 1 else "❌ Placement Nahi Hoga"
